@@ -1,0 +1,57 @@
+{
+  "name": "t",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parallelshell 'npm run serve' 'npm run watch:js'",
+    "uglify-tl": "uglifyjs --compress --mangle --output dist/tl.min.js -- dist/tl.js",
+    "uglify-t": "uglifyjs --compress --mangle --output dist/t.min.js -- dist/t.js",
+    "babel": "babel src --out-dir dist",
+    "copy:prod-test-r-old": "copyfiles -f {./dist/t.js,./dist/tl.js,./dist/t.min.js,./dist/tl.min.js,./dist/index.html} ./prod-test-r && replace 'apiKeysapiKeysapiKeys' 'test-r-key' prod-test-r/t.js prod-test-r/t.min.js",
+    "copy:prod-r-old": "copyfiles -f {./dist/t.js,./dist/tl.js,./dist/t.min.js,./dist/tl.min.js} ./prod-r && replace 'apiKeysapiKeysapiKeys' 'r-key' prod-r/t.js prod-r/t.min.js",
+    "copy:prod-test-r": "copyfiles -f {./dist/t.js,./dist/tl.js,./dist/t.min.js,./dist/tl.min.js,./dist/index.html} ./prod/test-r && replace 'apiKeysapiKeysapiKeys' 'test-r-key' prod/test-r/t.js prod/test-r/t.min.js",
+    "copy:prod-r": "copyfiles -f {./dist/t.js,./dist/tl.js,./dist/t.min.js,./dist/tl.min.js} ./prod/r && replace 'apiKeysapiKeysapiKeys' 'r-key' prod/r/t.js prod/r/t.min.js",
+    "copy:prod-test-ip": "copyfiles -f {./dist/t.js,./dist/tl.js,./dist/t.min.js,./dist/tl.min.js} ./prod/test-ip && replace 'apiKeysapiKeysapiKeys' 'test-ip-key' prod/test-ip/t.js prod/test-ip/t.min.js && mv prod/test-ip/tl.js prod/test-ip/detect.js && mv prod/test-ip/tl.min.js prod/test-ip/detect.min.js",
+    "copy:prod-ip": "copyfiles -f {./dist/t.js,./dist/tl.js,./dist/t.min.js,./dist/tl.min.js} ./prod/ip && replace 'apiKeysapiKeysapiKeys' 'ip-key' prod/ip/t.js prod/ip/t.min.js && mv prod/ip/tl.min.js prod/ip/detect.min.js",
+    "build:js": "parcel build src/tl.js -d dist --no-source-maps --no-minify && parcel build src/t.js -d dist --no-source-maps --no-minify && npm run uglify-tl & npm run uglify-t & npm run copy:prod-test-r-old & npm run copy:prod-r-old & npm run copy:prod-test-r & npm run copy:prod-r & npm run copy:prod-test-ip & npm run copy:prod-ip",
+    "build:js_": "npm run babel && npm run uglify-tl && npm run uglify-t & npm run copy:prod-test-r-old & npm run copy:prod-r-old & npm run copy:prod-test-r & npm run copy:prod-r & npm run copy:prod-test-ip & npm run copy:prod-ip",
+    "watch:js": "onchange 'src/**/*.js' -- npm run build:js",
+    "serve": "browser-sync start -f './dist/**/*.min.js,./dist/**/*.html' -s './dist/' --startPath './index.html'",
+    "_postinstall": "npm start",
+    "//": "",
+    "COMMENT": "",
+    "COMMENT_start": "run two scripts in pararrel",
+    "COMMENT_uglify-tl": "uglify tl.js",
+    "COMMENT_uglify-t": "uglify t.js",
+    "COMMENT_babel": "babelify *.js",
+    "COMMENT_copy:prod": "copy specified files to ./prod/",
+    "COMMENT_build:js": "run correctry only &&, & will be failed",
+    "COMMENT_watch:js": "watch js files and run build;js. it never accept & or && on last sentence",
+    "COMMENT_prod": "edit and copy for prod to each directories",
+    "COMMENT_serve": "run browser-sync"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mijabi/parcel"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "browser-sync": "^2.23.7",
+    "copyfiles": "^2.0.0",
+    "jsdoc": "^3.5.5",
+    "onchange": "^3.3.0",
+    "parallelshell": "^3.0.2",
+    "replace": "^1.0.0",
+    "uglify-js": "^3.3.22"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  }
+}
